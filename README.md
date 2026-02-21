@@ -21,7 +21,7 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python scripts/reindex.py
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+python scripts/localhost.py
 ```
 
 Open: `http://localhost:8000`
@@ -38,3 +38,14 @@ Open: `http://localhost:8000`
 3. Add source authority scoring and freshness ranking.
 4. Add user feedback loops and learning-to-rank.
 5. Add crawler + ingestion workflows for trusted Christian sources.
+
+
+### Quick local test
+
+After installation, run:
+
+```bash
+python scripts/localhost.py
+```
+
+Then open `http://localhost:8000` in your browser.
