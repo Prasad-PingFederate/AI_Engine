@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ app_name }}</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>{{ app_name }}</h1>
+    <p class="subtitle">Hybrid retrieval with query expansion, source authority boost, and optional filters</p>
+
+    <form method="get" action="/" class="search-form">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search: salvation, prayer, John 3:16..." required minlength="2"/>
+      <select name="source_type">
+        <option value="">All types</option>
+        <option value="bible" {% if source_type == 'bible' %}selected{% endif %}>Bible</option>
+        <option value="person" {% if source_type == 'person' %}selected{% endif %}>Person</option>
+        <option value="article" {% if source_type == 'article' %}selected{% endif %}>Article</option>
+        <option value="sermon" {% if source_type == 'sermon' %}selected{% endif %}>Sermon</option>
+        <option value="qa" {% if source_type == 'qa' %}selected{% endif %}>Q&A</option>
+      </select>
+      <input type="text" name="book" value="{{ book }}" placeholder="Book filter (e.g. John)"/>
+      <button type="submit">Search</button>
+    </form>
+
+    {% if result %}
+    <section class="meta">
+      <p><strong>{{ result.total }}</strong> result(s) in {{ result.took_ms }} ms</p>
+    </section>
+
+    <section class="results">
+      {% for hit in result.hits %}
+      <article class="card">
+        <h3>{{ hit.title }}</h3>
+        <p class="source">{{ hit.source_type }}{% if hit.author %} • {{ hit.author }}{% endif %}</p>
+        <p>{{ hit.snippet }}</p>
+        <p class="scores">score={{ hit.score }} (keyword={{ hit.keyword_score }}, semantic={{ hit.semantic_score }})</p>
+      </article>
+      {% endfor %}
+    </section>
+    {% endif %}
+  </main>
+</body>
+</html>
